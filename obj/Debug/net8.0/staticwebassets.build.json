@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "fEZajSY4ACi/sZN5e5QqA0/GzPp3ZZWj5faSslASHVo=",
+  "Source": "OrderMonitorService",
+  "BasePath": "_content/OrderMonitorService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
