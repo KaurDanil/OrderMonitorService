@@ -1,6 +1,6 @@
-using OrderMonitorService.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using OrderMonitorService.Models;
 
 namespace OrderMonitorService.Repositories
 {

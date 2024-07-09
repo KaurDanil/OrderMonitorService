@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderMonitorService.Models;
-using OrderMonitorService.Repositories;
+using OrderMonitorService.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,34 +10,35 @@ namespace OrderMonitorService.Controllers
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IOrderService _orderService;
 
-        public OrdersController(IOrderRepository orderRepository)
+        public OrdersController(IOrderService orderService)
         {
-            _orderRepository = orderRepository;
+            _orderService = orderService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            return Ok(await _orderRepository.GetAllOrdersAsync());
+            var orders = await _orderService.GetAllOrdersAsync();
+            return Ok(orders);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(int id)
         {
-            var order = await _orderRepository.GetOrderByIdAsync(id);
+            var order = await _orderService.GetOrderByIdAsync(id);
             if (order == null)
             {
                 return NotFound();
             }
-            return order;
+            return Ok(order);
         }
 
         [HttpPost]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
-            await _orderRepository.AddOrderAsync(order);
+            await _orderService.AddOrderAsync(order);
             return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
         }
 
@@ -49,14 +50,14 @@ namespace OrderMonitorService.Controllers
                 return BadRequest();
             }
 
-            await _orderRepository.UpdateOrderAsync(order);
+            await _orderService.UpdateOrderAsync(order);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
-            await _orderRepository.DeleteOrderAsync(id);
+            await _orderService.DeleteOrderAsync(id);
             return NoContent();
         }
     }

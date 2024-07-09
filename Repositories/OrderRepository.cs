@@ -17,23 +17,23 @@ namespace OrderMonitorService.Repositories
 
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders.Include(o => o.OrderItems).ToListAsync();
         }
 
         public async Task<Order> GetOrderByIdAsync(int id)
         {
-            return await _context.Orders.FindAsync(id);
+            return await _context.Orders.Include(o => o.OrderItems).FirstOrDefaultAsync(o => o.Id == id) ?? throw new InvalidOperationException("Order not found");
         }
 
         public async Task AddOrderAsync(Order order)
         {
-            _context.Orders.Add(order);
+            await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateOrderAsync(Order order)
         {
-            _context.Entry(order).State = EntityState.Modified;
+            _context.Orders.Update(order);
             await _context.SaveChangesAsync();
         }
 
